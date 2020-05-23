@@ -14,5 +14,8 @@ Route::get('registro/{nombre}/{telefono}/{contra}/{tipoUsuario}', ['uses' => 'Us
 //ENTRADAS
 Route::get('registroEntrada/{cantidad}/{producto}/{precio}/{totalEntrada}', ['uses' => 'EntradaController@registrar']);
 
-//ENTRADAS
+//PRODUCTOS
 Route::get('registroProducto/{tipoProducto}/{precio}/{descripcion}', ['uses' => 'ProductoController@registrar']);
+
+//PEDIDOS
+Route::get('registroPedido/{producto}/{hora}/{fecha}/{cantidad}/{precio}/{totalPedido}/{notas}', ['uses' => 'PedidoController@registrar']);
