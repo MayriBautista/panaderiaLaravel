@@ -26,4 +26,37 @@ class ProductoController extends Controller
             echo json_encode($arr);
         }
     }
+
+    public function mostrarProductos(){
+        $producto = Producto::get();
+        echo $producto;
+   }
+
+   public function mostrarProducto($idProducto){
+    try{
+        $producto = Producto::where('idProducto',$idProducto)->first();
+        echo $producto;
+    } catch(\Illuminate\Database\QueryException $e){
+        $errorCore = $e->getMessage();
+        $arr = array('estado' => $errorCore);
+        echo json_encode($arr);
+    }
+}
+
+public function eliminarProducto($idProducto){
+    try{
+        $eliminar = DB::delete('delete from producto where idProducto = ?', [$idProducto]);
+        if($eliminar == 1){
+            $arr = array('resultado' => "eliminado");
+            echo json_encode($arr);
+        } else {
+            $arr = array('resultado' => "no eliminado");
+            echo json_encode($arr);
+        }
+    } catch(\Illuminate\Database\QueryException $e){
+        $errorCore = $e->getMessage();
+        $arr = array('resultado' => $errorCore);
+        echo json_encode($arr);
+    }
+}
 }

@@ -4,8 +4,9 @@ namespace App;
 
 use Illuminate\Database\Eloquent\Model;
 
-class EntradaProducto extends Model
+class Salida extends Model
 {
-    protected $table = 'entra_producto';
+    protected $table = 'salida';
+    protected $primaryKey = 'idSalida';
     public $timestamps = false;
 }
