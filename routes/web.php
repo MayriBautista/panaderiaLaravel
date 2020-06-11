@@ -22,10 +22,11 @@ Route::get('updateUsuario/{nombre}/{telefono}/{contrasena}/{tipoUsuario}/{idUsua
 Route::get('registroEntrada/{fecha}/{idProducto}/{cantidad}/{precio}/{totalEntrada}', ['uses' => 'EntradaController@registrar']);
 
 //PRODUCTOS
-Route::get('registroProducto/{tipoProducto}/{precio}/{descripcion}', ['uses' => 'ProductoController@registrar']);
+Route::get('registroProducto/{tipoProducto}/{descripcion}/{precio}/{stock}', ['uses' => 'ProductoController@registrar']);
 Route::get('mostrarProductos', ['uses' => 'ProductoController@mostrarProductos']);
 Route::get('mostrarProducto/{idProducto}', ['uses' => 'ProductoController@mostrarProducto']);
 Route::get('eliminarProducto/{idProducto}', ['uses' => 'ProductoController@eliminarProducto']);
+Route::get('existeProducto/{tipoProducto}', ['uses' => 'ProductoController@existeProducto']);
 
 
 //PEDIDOS

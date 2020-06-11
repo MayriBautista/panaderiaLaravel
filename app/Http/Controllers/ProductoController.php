@@ -8,11 +8,10 @@ use DB;
 
 class ProductoController extends Controller
 {
-    public function registrar($tipoProducto,$precio,$descripcion){
-        try{
-                $producto = Producto::insert(['tipoProducto'=>$tipoProducto, 'precio'=>$precio,'descripcion'=>$descripcion]);
 
-                //Si fue insertada nos regresa el mensaje "insertado"
+    public function registrar($tipoProducto,$descripcion,$precio,$stock){
+        try{
+                $producto = Producto::insert(['tipoProducto'=>$tipoProducto,'descripcion'=>$descripcion, 'precio'=>$precio, 'stock'=>$stock]);
                 if($producto == 1){
                    $arr = array('resultado' => "insertado");
                    echo json_encode($arr);
@@ -31,6 +30,18 @@ class ProductoController extends Controller
         $producto = Producto::get();
         echo $producto;
    }
+
+   public function existeProducto($tipoProducto){
+    $existe = Producto::where('tipoProducto',$tipoProducto)->first();
+
+            if($existe) {
+                $arr = array('resultado' => "existe");
+                echo json_encode($arr);
+            } else {
+                $arr = array('resultado' => "no existe");
+                echo json_encode($arr);
+            }
+    }
 
    public function mostrarProducto($idProducto){
     try{
