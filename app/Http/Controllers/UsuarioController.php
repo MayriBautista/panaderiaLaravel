@@ -8,6 +8,43 @@ use DB;
 
 class UsuarioController extends Controller
 {
+    public function login($nombre, $contra){
+        try{
+           $uc = new UsuarioController;
+            $nombreExiste = $uc->comprobarNombre($nombre);
+                $usuario = Usuario::where('contrasena','=',$contra)->where('nombre','=',$nombre)->first();
+                if(empty($usuario)){
+                    if($nombreExiste){
+                        $arr = array('idUsuario'=> -2);
+                        echo json_encode($arr);
+                    } else {
+                        $arr = array('idUsuario'=> 0);
+                        echo json_encode($arr);
+                    }
+                } else {
+                    echo $usuario;
+                }
+        } catch(\Illuminate\Database\QueryException $e){
+            $errorCore = $e->getMessage();
+            $arr = array('estado' => $errorCore);
+            echo json_encode($arr);
+        }
+    }
+
+    public function nombreExiste($nombre){
+        $nombre = Usuario::select('nombre')->where('nombre','=',$nombre)->first();
+        if($nombre != null){
+            return true;
+        }
+    }
+
+    public function comprobarNombre($nombre){
+        $ucont = new UsuarioController;
+        if( $ucont->nombreExiste($nombre)){
+            return true;
+        } 
+    }
+
     public function registrar($nombre,$telefono,$contra,$tipoUsuario){
         try{
                 $usuario = Usuario::insert(['nombre'=>$nombre, 'telefono'=>$telefono,'contrasena'=>$contra,'tipoUsuario'=>$tipoUsuario]);

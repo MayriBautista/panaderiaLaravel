@@ -34,4 +34,39 @@ class SalidaController extends Controller
             echo json_encode($arr);
         }
     }
+
+    public function nuevaSalida($idSalida,$idProducto,$idUsuario,$fecha,$cantidad,$precio,$total){
+        try {
+            $existe = Salida::where('idSalida',$idSalida)->first();
+
+            if(empty($existe)) {
+                $salida = Salida::insert([
+                    'idSalida' => $idSalida,
+                    'idUsuario' => $idUsuario,
+                    'fecha' => DB::raw('curdate()'),
+                    'total' => 0
+                ]);
+            }
+            $salidaProducto = DB::insert('insert into salida_producto (idSalida, idProducto, cantidad, precio) values (?, ?, ?, ?)', 
+            [$idSalida, $idProducto, $cantidad, $precio]);
+
+            $actualizarTotal = DB::update('update salida set total = total + ? where idSalida = ?', [$total, $idSalida]);
+            $total = DB::table('salida')->where('idSalida',$idSalida)->sum('total');
+            $quitarEntrada = DB::update('update entra set total = total - ? where idProducto = ?', [$cantidad,$idProducto]);
+
+                if($salidaProducto == 1 && $quitarEntrada == 1 && $actualizarTotal == 1) {
+                    $arr = array('resultado' => "insertado",
+                'total'=>$total);
+                    echo json_encode($arr);
+                } else {
+                    $arr = array('resultado' => "no insertado");
+                    echo json_encode($arr);
+                }
+
+        } catch(\Illuminate\Database\QueryException $e){
+            $errorCore = $e->getMessage();
+            $arr = array('resultado' => $errorCore);
+            echo json_encode($arr);
+        }
+    }
 }
