@@ -25,8 +25,9 @@ class PedidoController extends Controller
                 ]);
 
             $PedProd = PedidoProducto::insert(['idPedido'=>$idPedido,'idProducto'=>$idProducto,'cantidad'=>$cantidad, 'notas'=>$notas]);
-
-            if($PedProd == 1){
+            $quintarStock = DB::update('update producto set stock = stock - ? where idProducto = ?', [$cantidad,$idProducto]);
+        
+            if($PedProd == 1 && $quintarStock == 1){
                 $arr = array('resultado' => "insertado");
                 echo json_encode($arr);
             } else {
@@ -41,14 +42,14 @@ class PedidoController extends Controller
         }
     }
 
-    public function registrar($idProducto,$hora,$fecha,$cantidad,$totalPedido,$notas){
+    public function registrar($idProducto,$hora,$fecha,$cantidad,$total,$notas){
         $fecha = Carbon::now()->toDateTimeString();
         try {
                 $idPedido = DB::table('pedido')
                 ->insertGetId([                    
                     'hora' => $hora,
                     'fecha' => $fecha,
-                    'totalPedido' => $totalPedido
+                    'total' => $total
                 ]);
 
             $PedProd = PedidoProducto::insert(['idPedido'=>$idPedido,'idProducto'=>$idProducto,'cantidad'=>$cantidad, 'notas'=>$notas]);

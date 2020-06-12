@@ -70,4 +70,27 @@ public function eliminarProducto($idProducto){
         echo json_encode($arr);
     }
 }
+
+    public function updateP($tipoProducto,$descripcion,$precio,$idProducto){
+    try{
+        
+        $actualizar = DB::update(
+            'update producto set tipoProducto = ?,descripcion = ?, precio = ? 
+             where idProducto = ?', 
+        [$tipoProducto,$descripcion,$precio,$idProducto]);
+
+            if ($actualizar != 1){
+                $arr = array('resultado'=>'error');
+                echo json_encode($arr);
+            } else {
+                $arr = array('resultado' => 'actualizado');
+                echo json_encode($arr);
+            }
+
+        } catch(\Illuminate\Database\QueryException $e){
+            $errorCore = $e->getMessage();
+            $arr = array('estado' => $errorCore);
+            echo json_encode($arr);
+        }
+    }
 }

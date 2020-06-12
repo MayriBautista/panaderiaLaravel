@@ -89,8 +89,10 @@ class UsuarioController extends Controller
 public function updateU($nombre,$telefono,$contrasena,$tipoUsuario,$idUsuario){
     try{
         
-        $actualizar = DB::update('update usuario set nombre = ?,telefono = ?, contrasena = ?, tipoUsuario = ? where idUsuario = ?', [$nombre,$telefono,$contrasena,$tipoUsuario,$idUsuario]);
-        //echo $actualizar;
+        $actualizar = DB::update(
+            'update usuario set nombre = ?,telefono = ?, contrasena = ?, 
+            tipoUsuario = ? where idUsuario = ?', 
+        [$nombre,$telefono,$contrasena,$tipoUsuario,$idUsuario]);
 
        if ($actualizar != 1){
             $arr = array('resultado'=>'error');
