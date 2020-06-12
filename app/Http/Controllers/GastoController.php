@@ -35,13 +35,14 @@ class GastoController extends Controller
    }
    
    public function mostrarG(){
-        $gastos = DB::table('gasto')->distinct()
-                    ->join('usuario','usuario.idUsuario','=','gasto.idUsuario')
-                    ->select('gasto.idGasto', 'gasto.fecha', 'gasto.descripcion', 'gasto.totalGasto',
-                    'usuario.nombre as usuario')
-                    ->get();
+        $gasto = DB::select("
+        SELECT usuario.nombre, gasto.descripcion, gasto.total, gasto.fecha, gasto.idusuario, gasto.idGasto
+        FROM usuario, gasto
+        WHERE usuario.idUsuario = gasto.idUsuario
+        AND gasto.fecha = curdate()
+        ", [$fecha]);
 
-                     echo $gastos;
+        echo json_encode($gasto);
    }
 
    public function mostrarTotal($fecha1){
@@ -79,13 +80,13 @@ class GastoController extends Controller
         echo json_encode($gasto);
     }
 
-    public function updateG($descripcion,$idUsuario,$total,$idGasto){
+    public function updateG($descripcion,$total,$idGasto){
         try{
             
             $actualizar = DB::update(
-                'update gasto set descripcion = ?,idUsuario = ?, total = ? 
+                'update gasto set descripcion = ?, total = ? 
                  where idGasto = ?', 
-            [$descripcion,$idUsuario,$total,$idGasto]);
+            [$descripcion,$total,$idGasto]);
     
                 if ($actualizar != 1){
                     $arr = array('resultado'=>'error');
