@@ -21,8 +21,9 @@ Route::get('updateUsuario/{nombre}/{telefono}/{contrasena}/{tipoUsuario}/{idUsua
 //ENTRADAS $idProducto,$cantidad,$precio,$fecha,$total
 Route::get('registroEntrada/{idProducto}/{cantidad}/{precio}/{fecha}/{total}', ['uses' => 'EntradaController@registrar']);
 Route::get('getEntradas/{fecha}', ['uses' => 'EntradaController@getEntradas']);
-Route::get('mostrarTotal/{fecha}', ['uses' => 'EntradaController@mostrarTotal']);
+Route::get('mostrarTotalE/{fecha}', ['uses' => 'EntradaController@mostrarTotal']);
 Route::get('eliminarEntrada/{idEntrada}/{cantidad}/{idProducto}', ['uses' => 'EntradaController@eliminarEntrada']);
+Route::get('updateEntrada/{cantidad}/{precio}/{fecha}/{total}/{notas}/{idEntrada}/{idProducto}', ['uses' => 'EntradaController@updateE']);
 
 //PRODUCTOS
 Route::get('registroProducto/{tipoProducto}/{descripcion}/{precio}/{stock}', ['uses' => 'ProductoController@registrar']);
@@ -31,6 +32,7 @@ Route::get('mostrarProducto/{idProducto}', ['uses' => 'ProductoController@mostra
 Route::get('eliminarProducto/{idProducto}', ['uses' => 'ProductoController@eliminarProducto']);
 Route::get('existeProducto/{tipoProducto}', ['uses' => 'ProductoController@existeProducto']);
 Route::get('updateProducto/{tipoProducto}/{descripcion}/{precio}/{idProducto}', ['uses' => 'ProductoController@updateP']);
+Route::get('mostrarTotalP', ['uses' => 'ProductoController@mostrarTotal']);
 
 //PEDIDOS
 Route::get('registroPedido/{idProducto}/{hora}/{fecha}/{cantidad}/{precio}/{total}/{notas}/{estado}', ['uses' => 'PedidoController@insertarPedido']);
@@ -53,12 +55,14 @@ Route::get('mostrarTotalG/{fecha}', ['uses' => 'GastoController@mostrarTotal']);
 //SALIDAS $idSalida,$idProducto,$idUsuario,$fecha,$cantidad,$precio,$totalSalida
 Route::get('nuevaSalida/{idSalida}/{idProducto}/{idUsuario}/{fecha}/{cantidad}/{precio}/{totalSalida}',['uses'=> 'SalidaController@nuevaSalida']);
 
-//VENTAS $idVenta,$idProducto,$idUsuario,$fecha,$cantidad,$precio,$total
+//VENTAS 
 Route::get('nuevaVenta/{idVenta}/{idUsuario}/{fecha}/{total}',['uses'=> 'VentaController@nuevaVenta']);
 Route::get('getVenta/{idVenta}', ['uses' => 'VentaController@getVenta']);
 Route::get('getNewID', ['uses' => 'VentaController@getNewID']);
-//registrarVentaP($idVenta,$idProducto,$cantidad,$precio
+Route::get('ventasTotales/{fecha}', ['uses' => 'VentaController@ventasTotales']);
 Route::get('registrarVentaP/{idVenta}/{idProducto}/{cantidad}/{precio}/{subtotal}',['uses'=> 'VentaController@registrarVentaP']);
 Route::get('mostrarVenta/{idVenta}', ['uses' => 'VentaController@mostrarVenta']);
+//public function eliminarSV($idSVenta,$cantidad,$idProducto){
+Route::get('eliminarSV/{idVenta}/{cantidad}/{idProducto}', ['uses' => 'VentaController@eliminarSV']);
 
 ?>

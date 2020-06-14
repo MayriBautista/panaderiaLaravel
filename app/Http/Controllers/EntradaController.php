@@ -56,6 +56,30 @@ class EntradaController extends Controller
         echo $entrada;
    }
 
+   public function updateE($cantidad,$precio,$fecha,$total,$idEntrada,$idProducto){
+    try{
+        
+        $actualizar = DB::update(
+            'update entradas set cantidad = ?, precio = ?, fecha = ?, total = ?, notas = ?
+             where idEntrada = ?', 
+        [$cantidad,$precio,$fecha,$total,$idEntrada]);
+        $sumarStock = DB::update('update producto set stock = stock + ? where idProducto = ?', [$cantidad,$idProducto]);
+
+            if($actualizar == 1 && $sumarStock == 1){
+                $arr = array('resultado' => "actualizado");
+                echo json_encode($arr);
+            } else {
+                $arr = array('resultado' => "no actualizado");
+                echo json_encode($arr);
+            }
+
+        } catch(\Illuminate\Database\QueryException $e){
+            $errorCore = $e->getMessage();
+            $arr = array('estado' => $errorCore);
+            echo json_encode($arr);
+        }
+    }
+
    public function eliminarEntrada($idEntrada,$cantidad,$idProducto){
     try{
         $eliminar = DB::delete('delete from entradas where idEntrada = ?', [$idEntrada]);

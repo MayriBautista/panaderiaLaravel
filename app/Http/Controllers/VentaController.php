@@ -53,11 +53,22 @@ class VentaController extends Controller
         echo json_encode($venta);
     }
 
+    public function ventasTotales($fecha) {
+        $venta = DB::select("
+        SELECT usuario.nombre, venta.total, venta.fecha, venta.idUsuario, venta.idVenta
+        FROM usuario, venta
+        WHERE usuario.idUsuario = venta.idUsuario
+        AND venta.fecha = curdate()
+        ", [$fecha]);
+
+        echo json_encode($venta);
+    }
+
     public function eliminarSV($idSVenta,$cantidad,$idProducto){
         try{
             $eliminar = DB::delete('delete from venta_producto where idSVenta = ?', [$idSVenta]);
-            $sumarStock = DB::update('update producto set stock = stock + ? where idProducto = ?', [$cantidad,$idProducto]);
-            if($eliminar == 1 && $sumarStock == 1){
+            $restarStock = DB::update('update producto set stock = stock - ? where idProducto = ?', [$cantidad,$idProducto]);
+            if($eliminar == 1 && $restarStock == 1){
                 $arr = array('resultado' => "eliminado");
                 echo json_encode($arr);
             } else {

@@ -10,7 +10,7 @@ use DB;
 
 class PedidoController extends Controller
 {
-    public function insertarPedido($idProducto,$fecha1,$hora1,$cantidad,$total,$notas,$estado){
+    public function insertarPedido($idProducto,$hora1,$fecha1,$cantidad,$precio,$total,$notas,$estado){
         try{
             $oldFecha = substr($fecha1, 0, -6);
             $fecha = date('Y-m-d', strtotime($oldFecha));
@@ -25,7 +25,7 @@ class PedidoController extends Controller
                     'estado' => $estado
                 ]);
 
-            $PedProd = PedidoProducto::insert(['idPedido'=>$idPedido,'idProducto'=>$idProducto,'cantidad'=>$cantidad, 'notas'=>$notas]);
+            $PedProd = PedidoProducto::insert(['idPedido'=>$idPedido,'idProducto'=>$idProducto,'cantidad'=>$cantidad,'precio'=>$precio, 'notas'=>$notas]);
             
             if($PedProd == 1){
                 $arr = array('resultado' => "insertado");
@@ -143,23 +143,21 @@ class PedidoController extends Controller
 
         public function updatePedido($hora,$fecha,$cantidad,$precio,$total,$notas,$idPedido){
             try{
-                $actualizarE = DB::update(
-                    'update pedido set hora = ?, fecha = ?, total = ?
-                     where idPedido = ?', 
-                [$hora,$fecha,$total,$idPedido]);
-    
-                $actualizarEP = DB::update(
-                    'update pedido_producto set cantidad = ?, precio = ?, notas = ?
-                     where idPedido = ?', 
-                    [$cantidad,$precio,$notas,$idPedido]);
+                $actualizar = DB::update(
+                    'update pedido,pedido_producto 
+                     set pedido.hora = ?, pedido.fecha = ?, pedido.total = ?,
+                     pedido_producto.cantidad = ?, pedido_producto.precio = ?, pedido_producto.notas = ?
+                     where pedido.idPedido = pedido_producto.idPedido
+                     and pedido.idPedido = ?', 
+                [$hora,$fecha,$cantidad,$precio,$total,$notas,$idPedido]);
 
-                    if($actualizarE == 1 && $actualizarEP == 1){
-                        $arr = array('resultado' => "insertado");
-                        echo json_encode($arr);
-                    } else {
-                        $arr = array('resultado' => "no insertado");
-                        echo json_encode($arr);
-                    }  
+                if ($actualizar != 1){
+                    $arr = array('resultado'=>'error');
+                    echo json_encode($arr);
+                } else {
+                    $arr = array('resultado' => 'actualizado');
+                    echo json_encode($arr);
+                }  
     
                 } catch(\Illuminate\Database\QueryException $e){
                     $errorCore = $e->getMessage();

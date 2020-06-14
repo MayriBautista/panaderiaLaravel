@@ -34,7 +34,7 @@ class GastoController extends Controller
         echo $gasto;
    }
    
-   public function mostrarG(){
+   public function mostrarG($fecha){
         $gasto = DB::select("
         SELECT usuario.nombre, gasto.descripcion, gasto.total, gasto.fecha, gasto.idusuario, gasto.idGasto
         FROM usuario, gasto

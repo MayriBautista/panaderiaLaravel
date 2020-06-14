@@ -93,4 +93,9 @@ public function eliminarProducto($idProducto){
             echo json_encode($arr);
         }
     }
+
+    public function mostrarTotal(){
+        $producto = DB::table('producto')->sum('stock');
+        echo $producto;
+   }
 }
