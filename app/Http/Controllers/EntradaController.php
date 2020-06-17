@@ -49,10 +49,17 @@ class EntradaController extends Controller
         echo json_encode($entrada);
     }
 
-    public function mostrarTotal($fecha1){
-        $oldFecha = substr($fecha1, 0, -6);
-            $fecha = date('Y-m-d', strtotime($oldFecha));
-        $entrada = DB::table('entradas')->where('fecha',$fecha)->sum('total');
+    public function mostrarEntradas(){
+        $entrada = DB::select("
+        SELECT producto.tipoProducto, entradas.precio, entradas.cantidad, entradas.total, entradas.fecha, entradas.idProducto, entradas.idEntrada
+        FROM producto, entradas
+        WHERE producto.idProducto = entradas.idProducto
+        ");
+        echo json_encode($entrada);
+   }
+
+    public function mostrarTotal(){
+        $entrada = DB::table('entradas')->sum('total');
         echo $entrada;
    }
 

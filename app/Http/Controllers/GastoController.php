@@ -34,21 +34,18 @@ class GastoController extends Controller
         echo $gasto;
    }
    
-   public function mostrarG($fecha){
+   public function mostrarG(){
         $gasto = DB::select("
         SELECT usuario.nombre, gasto.descripcion, gasto.total, gasto.fecha, gasto.idusuario, gasto.idGasto
         FROM usuario, gasto
         WHERE usuario.idUsuario = gasto.idUsuario
-        AND gasto.fecha = curdate()
-        ", [$fecha]);
+        ");
 
         echo json_encode($gasto);
    }
 
-   public function mostrarTotal($fecha1){
-        $oldFecha = substr($fecha1, 0, -6);
-            $fecha = date('Y-m-d', strtotime($oldFecha));
-        $gasto = DB::table('gasto')->where('fecha',$fecha)->sum('total');
+   public function mostrarTotal(){
+        $gasto = DB::table('gasto')->sum('total');
         echo $gasto;
    }
 

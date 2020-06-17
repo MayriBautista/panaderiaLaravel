@@ -53,16 +53,20 @@ class VentaController extends Controller
         echo json_encode($venta);
     }
 
-    public function ventasTotales($fecha) {
+    public function ventasTotales() {
         $venta = DB::select("
         SELECT usuario.nombre, venta.total, venta.fecha, venta.idUsuario, venta.idVenta
         FROM usuario, venta
         WHERE usuario.idUsuario = venta.idUsuario
-        AND venta.fecha = curdate()
-        ", [$fecha]);
+        ");
 
         echo json_encode($venta);
     }
+
+    public function mostrarTotal(){
+        $venta = DB::table('venta')->sum('total');
+        echo $venta;
+   }
 
     public function eliminarSV($idSVenta,$cantidad,$idProducto){
         try{

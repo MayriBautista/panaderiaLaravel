@@ -78,14 +78,13 @@ class PedidoController extends Controller
                     echo json_encode($pedido);
    }
 
-   public function getPedidos($fecha){
+   public function getPedidos(){
         $pedido = DB::select("
         SELECT producto.tipoProducto, producto.precio, pedido.fecha, pedido.hora, pedido.estado, pedido.total, pedido_producto.cantidad, pedido_producto.precio, pedido_producto.notas, pedido_producto.idProducto, pedido.idPedido
         FROM producto, pedido, pedido_producto
         WHERE pedido_producto.idPedido = pedido.idPedido
         AND producto.idProducto = pedido_producto.idProducto
-        AND pedido.fecha = curdate()
-        ", [$fecha]);
+        ");
 
         echo json_encode($pedido);
    }
