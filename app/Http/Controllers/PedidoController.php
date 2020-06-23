@@ -150,11 +150,11 @@ class PedidoController extends Controller
                      and pedido.idPedido = ?', 
                 [$hora,$fecha,$cantidad,$precio,$total,$notas,$idPedido]);
 
-                if ($actualizar != 1){
-                    $arr = array('resultado'=>'error');
+                if ($actualizar == 1){
+                    $arr = array('resultado'=>'actualizado');
                     echo json_encode($arr);
                 } else {
-                    $arr = array('resultado' => 'actualizado');
+                    $arr = array('resultado' => '');
                     echo json_encode($arr);
                 }  
     

@@ -44,7 +44,7 @@ class VentaController extends Controller
 
     public function getVenta($idVenta) {
         $venta = DB::select("
-        SELECT producto.tipoProducto, producto.descripcion, producto.precio,venta_producto.cantidad, venta_producto.subtotal, venta_producto.idVenta, venta_producto.idSVenta
+        SELECT producto.tipoProducto, producto.idProducto, producto.descripcion, producto.precio,venta_producto.cantidad, venta_producto.subtotal, venta_producto.idVenta, venta_producto.idSVenta
         FROM producto, venta_producto
         WHERE producto.idProducto = venta_producto.idProducto
         AND venta_producto.idVenta = ?
@@ -71,8 +71,30 @@ class VentaController extends Controller
     public function eliminarSV($idSVenta,$cantidad,$idProducto){
         try{
             $eliminar = DB::delete('delete from venta_producto where idSVenta = ?', [$idSVenta]);
+
             $restarStock = DB::update('update producto set stock = stock - ? where idProducto = ?', [$cantidad,$idProducto]);
             if($eliminar == 1 && $restarStock == 1){
+                $arr = array('resultado' => "eliminado");
+                echo json_encode($arr);
+            } else {
+                $arr = array('resultado' => "no eliminado");
+                echo json_encode($arr);
+            }
+        } catch(\Illuminate\Database\QueryException $e){
+            $errorCore = $e->getMessage();
+            $arr = array('resultado' => $errorCore);
+            echo json_encode($arr);
+        }
+    }
+
+    public function eliminar(){
+        try{
+            
+            $eliminar = Venta::select()->delete();
+            $eliminarS = VentaProducto::select()->delete();
+
+            $restarStock = DB::update('update producto set stock = 0');
+            if($eliminar==1){
                 $arr = array('resultado' => "eliminado");
                 echo json_encode($arr);
             } else {

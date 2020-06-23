@@ -43,6 +43,23 @@ class ProductoController extends Controller
             }
     }
 
+    public function nohayProducto($idProducto){
+        $producto = DB::select("
+        SELECT idProducto, stock
+        FROM producto
+        WHERE stock = 0
+        AND idProducto = ?
+        ", [$idProducto]);
+
+        if($producto) {
+                    $arr = array('resultado' => "no hay");
+                    echo json_encode($arr);
+                } else {
+                    $arr = array('resultado' => "si hay");
+                    echo json_encode($arr);
+                }
+        }
+
    public function mostrarProducto($idProducto){
     try{
         $producto = Producto::where('idProducto',$idProducto)->first();
